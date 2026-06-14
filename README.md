@@ -24,11 +24,11 @@ make up
 
 This starts all three services (Postgres, backend, frontend), runs migrations automatically, and makes them available at:
 
-| Service  | URL                       |
-|----------|---------------------------|
-| Frontend | http://localhost:3000      |
-| Backend  | http://localhost:8080      |
-| Database | localhost:5432             |
+| Service  | URL                   |
+| -------- | --------------------- |
+| Frontend | http://localhost:3000 |
+| Backend  | http://localhost:8080 |
+| Database | localhost:5432        |
 
 ### Seed Sample Data
 
@@ -38,10 +38,10 @@ make seed
 
 This creates a test account and 3 sample tasks:
 
-| Field    | Value              |
-|----------|--------------------|
-| Email    | test@example.com   |
-| Password | password123        |
+| Field    | Value            |
+| -------- | ---------------- |
+| Email    | test@example.com |
+| Password | password123      |
 
 ## Available Commands
 
@@ -62,35 +62,35 @@ make reset          # Stop everything and wipe volumes
 
 ### Authentication
 
-| Method | Endpoint          | Auth | Description          |
-|--------|-------------------|------|----------------------|
-| POST   | /api/auth/signup  | —    | Register new user    |
-| POST   | /api/auth/login   | —    | Login, returns JWT   |
-| GET    | /api/auth/me      | JWT  | Get current user     |
+| Method | Endpoint         | Auth | Description        |
+| ------ | ---------------- | ---- | ------------------ |
+| POST   | /api/auth/signup | —    | Register new user  |
+| POST   | /api/auth/login  | —    | Login, returns JWT |
+| GET    | /api/auth/me     | JWT  | Get current user   |
 
 ### Tasks
 
 All task endpoints require `Authorization: Bearer <token>`.
 
-| Method | Endpoint        | Description                              |
-|--------|-----------------|------------------------------------------|
-| POST   | /api/tasks      | Create a task                            |
-| GET    | /api/tasks      | List tasks (filters, search, pagination) |
-| GET    | /api/tasks/:id  | Get a single task                        |
-| PATCH  | /api/tasks/:id  | Partially update a task                  |
-| DELETE | /api/tasks/:id  | Delete a task                            |
+| Method | Endpoint       | Description                              |
+| ------ | -------------- | ---------------------------------------- |
+| POST   | /api/tasks     | Create a task                            |
+| GET    | /api/tasks     | List tasks (filters, search, pagination) |
+| GET    | /api/tasks/:id | Get a single task                        |
+| PATCH  | /api/tasks/:id | Partially update a task                  |
+| DELETE | /api/tasks/:id | Delete a task                            |
 
 #### GET /api/tasks query parameters
 
-| Parameter  | Type   | Description                                         |
-|------------|--------|-----------------------------------------------------|
-| status     | string | Filter: `pending`, `in_progress`, `completed`       |
-| priority   | string | Filter: `low`, `medium`, `high`                     |
-| search     | string | Full-text search on title and description (ILIKE)   |
+| Parameter  | Type   | Description                                                           |
+| ---------- | ------ | --------------------------------------------------------------------- |
+| status     | string | Filter: `pending`, `in_progress`, `completed`                         |
+| priority   | string | Filter: `low`, `medium`, `high`                                       |
+| search     | string | Full-text search on title and description (ILIKE)                     |
 | sort_by    | string | `created_at`, `updated_at`, `due_date`, `priority`, `status`, `title` |
-| sort_order | string | `ASC` or `DESC` (default: `DESC`)                   |
-| page       | int    | Page number (default: 1)                            |
-| page_size  | int    | Results per page, max 100 (default: 10)             |
+| sort_order | string | `ASC` or `DESC` (default: `DESC`)                                     |
+| page       | int    | Page number (default: 1)                                              |
+| page_size  | int    | Results per page, max 100 (default: 10)                               |
 
 Response includes `total`, `page`, `page_size`, and `total_pages` for pagination.
 
@@ -104,23 +104,24 @@ GET /api/health → { "status": "healthy" }
 
 All config is read from environment — nothing is hardcoded. See `.env.example` for the full list.
 
-| Variable            | Required | Default               | Description                          |
-|---------------------|----------|-----------------------|--------------------------------------|
-| DATABASE_URL        | Yes      | —                     | PostgreSQL connection string         |
-| BACKEND_PORT        | No       | 8080                  | Backend listen port                  |
-| JWT_SECRET          | No       | dev-secret-key        | JWT signing key (change in prod)     |
-| JWT_EXPIRY          | No       | 24h                   | Token lifetime (e.g. `12h`, `7d`)    |
-| CORS_ORIGINS        | No       | http://localhost:3000 | Allowed CORS origin                  |
-| DB_MAX_OPEN_CONNS   | No       | 25                    | DB connection pool size              |
-| DB_MAX_IDLE_CONNS   | No       | 5                     | DB idle connection pool size         |
-| LOG_LEVEL           | No       | info                  | `debug`, `info`, `warn`, `error`     |
-| NEXT_PUBLIC_API_URL | No       | http://localhost:8080 | API base URL (browser-visible)       |
+| Variable            | Required | Default               | Description                       |
+| ------------------- | -------- | --------------------- | --------------------------------- |
+| DATABASE_URL        | Yes      | —                     | PostgreSQL connection string      |
+| BACKEND_PORT        | No       | 8080                  | Backend listen port               |
+| JWT_SECRET          | No       | dev-secret-key        | JWT signing key (change in prod)  |
+| JWT_EXPIRY          | No       | 24h                   | Token lifetime (e.g. `12h`, `7d`) |
+| CORS_ORIGINS        | No       | http://localhost:3000 | Allowed CORS origin               |
+| DB_MAX_OPEN_CONNS   | No       | 25                    | DB connection pool size           |
+| DB_MAX_IDLE_CONNS   | No       | 5                     | DB idle connection pool size      |
+| LOG_LEVEL           | No       | info                  | `debug`, `info`, `warn`, `error`  |
+| NEXT_PUBLIC_API_URL | No       | http://localhost:8080 | API base URL (browser-visible)    |
 
 > `DATABASE_URL` has no default — the backend exits immediately if it is missing.
 
 ## Database Schema
 
 ### users
+
 ```sql
 id         uuid        PRIMARY KEY
 email      varchar     UNIQUE NOT NULL
@@ -130,6 +131,7 @@ updated_at timestamptz NOT NULL
 ```
 
 ### tasks
+
 ```sql
 id          uuid        PRIMARY KEY
 user_id     uuid        NOT NULL REFERENCES users(id)
@@ -162,7 +164,7 @@ make test-frontend
 Current coverage:
 
 | Suite    | Tests | What's covered                                  |
-|----------|-------|-------------------------------------------------|
+| -------- | ----- | ----------------------------------------------- |
 | Backend  | 3     | Password hashing, JWT generation & verification |
 | Frontend | 4     | AuthCard rendering, form fields, mode toggle    |
 
@@ -217,12 +219,14 @@ Current coverage:
 ## Troubleshooting
 
 **Backend fails to start (database connection error)**
+
 ```bash
 docker-compose ps postgres      # Check Postgres is healthy
 docker-compose logs postgres    # Inspect Postgres logs
 ```
 
 **Frontend can't reach the backend**
+
 ```bash
 curl http://localhost:8080/api/health    # Verify backend is up
 # In docker-compose.yml, NEXT_PUBLIC_API_URL must be http://localhost:8080
@@ -230,10 +234,12 @@ curl http://localhost:8080/api/health    # Verify backend is up
 ```
 
 **401 on all task requests after login**
+
 - Token may have expired (default 24h) — log out and log back in
 - Verify `JWT_SECRET` is consistent between runs (not regenerated on restart)
 
 **Full reset**
+
 ```bash
 make reset    # Stops containers and wipes all volumes including the database
 make up       # Fresh start
