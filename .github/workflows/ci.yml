@@ -67,6 +67,8 @@ jobs:
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          BACKEND_PORT: ${{ secrets.BACKEND_PORT }}
+          DB_MAX_OPEN_CONNS: ${{ secrets.DB_MAX_OPEN_CONNS }}
         run: docker compose build
 
   deploy:
