@@ -1,7 +1,15 @@
 'use client'
 
-import { Buttons } from '@/app/ui/Buttons'
+import { EditIcon } from '@/app/icons/Edit'
 import { Task } from './TaskDashboard'
+import { TrashIcon } from '@/app/icons/Trash'
+import { CalendarIcon } from '@/app/icons/Calendar'
+import { FlameIcon } from '@/app/icons/Flame'
+import { CheckCircleIcon } from '@/app/icons/CheckCircle'
+import { PulseIcon } from '@/app/icons/Pulse'
+import { ClockIcon } from '@/app/icons/Clock'
+import { AlertIcon } from '@/app/icons/Alert'
+import { LeafIcon } from '@/app/icons/Leaf'
 
 interface TaskCardProps {
   task: Task
@@ -10,34 +18,59 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, onDelete, onEdit }: TaskCardProps) {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-      case 'in_progress':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
+  const priorityBarColor =
+    {
+      high: 'bg-red-500',
+      medium: 'bg-amber-400',
+      low: 'bg-emerald-500',
+    }[task.priority] ?? 'bg-gray-300'
+
+  const statusBadge = {
+    completed: {
+      className: 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300',
+      icon: <CheckCircleIcon />,
+      label: 'Completed',
+    },
+    in_progress: {
+      className: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300',
+      icon: <PulseIcon />,
+      label: 'In Progress',
+    },
+    pending: {
+      className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
+      icon: <ClockIcon />,
+      label: 'Pending',
+    },
+  }[task.status] ?? {
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+    icon: null,
+    label: task.status,
   }
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-      case 'medium':
-        return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-      case 'low':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'
-      default:
-        return 'bg-gray-100 text-gray-800'
-    }
+  const priorityBadge = {
+    high: {
+      className: 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-300',
+      icon: <FlameIcon />,
+      label: 'High',
+    },
+    medium: {
+      className: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
+      icon: <AlertIcon />,
+      label: 'Medium',
+    },
+    low: {
+      className: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300',
+      icon: <LeafIcon />,
+      label: 'Low',
+    },
+  }[task.priority] ?? {
+    className: 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
+    icon: null,
+    label: task.priority,
   }
 
   const formatDate = (dateString: string | null) => {
-    if (!dateString) return 'No due date'
+    if (!dateString) return null
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
@@ -45,47 +78,78 @@ export function TaskCard({ task, onDelete, onEdit }: TaskCardProps) {
     })
   }
 
+  const isOverdue =
+    task.due_date && task.status !== 'completed' && new Date(task.due_date) < new Date()
+
+  const formattedDate = formatDate(task.due_date)
+
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-      <div className="mb-4 flex items-start justify-between">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{task.title}</h3>
+    <div className="group relative overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600">
+      {/* Priority accent bar */}
+      <div className={`h-[3px] w-full ${priorityBarColor}`} />
+
+      <div className="p-5">
+        {/* Title & description */}
+        <div className="mb-4">
+          <h3 className="text-[15px] leading-snug font-medium text-gray-900 dark:text-white">
+            {task.title}
+          </h3>
           {task.description && (
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{task.description}</p>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-gray-500 dark:text-gray-400">
+              {task.description}
+            </p>
           )}
         </div>
-      </div>
 
-      <div className="mb-4 flex flex-wrap gap-2">
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusColor(task.status)}`}
-        >
-          {task.status
-            .split('_')
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ')}
-        </span>
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-medium ${getPriorityColor(task.priority)}`}
-        >
-          {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-        </span>
-      </div>
+        {/* Badges */}
+        <div className="mb-4 flex flex-wrap gap-2">
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium tracking-wide ${statusBadge.className}`}
+          >
+            {statusBadge.icon}
+            {statusBadge.label}
+          </span>
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium tracking-wide ${priorityBadge.className}`}
+          >
+            {priorityBadge.icon}
+            {priorityBadge.label}
+          </span>
+        </div>
 
-      {task.due_date && (
-        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-          Due: {formatDate(task.due_date)}
-        </p>
-      )}
+        {/* Due date */}
+        {formattedDate && (
+          <div
+            className={`mb-4 flex items-center gap-1.5 text-[12px] ${
+              isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'
+            }`}
+          >
+            <CalendarIcon />
+            <span>
+              {formattedDate}
+              {isOverdue && ' · Overdue'}
+            </span>
+          </div>
+        )}
 
-      <div className="flex gap-2">
-        <Buttons variant="primary" className="flex-1" onClick={() => onEdit(task)}>
-          Edit
-        </Buttons>
+        {/* Actions */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => onEdit(task)}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-[13px] font-medium text-gray-700 transition-all duration-150 hover:border-gray-300 hover:bg-gray-100 active:scale-[0.97] dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+          >
+            <EditIcon />
+            Edit
+          </button>
 
-        <Buttons variant="danger" className="flex-1" onClick={() => onDelete(task.id)}>
-          Delete
-        </Buttons>
+          <button
+            onClick={() => onDelete(task.id)}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-[13px] font-medium text-red-700 transition-all duration-150 hover:border-red-200 hover:bg-red-100 active:scale-[0.97] dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400 dark:hover:border-red-800 dark:hover:bg-red-900/30"
+          >
+            <TrashIcon />
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   )
