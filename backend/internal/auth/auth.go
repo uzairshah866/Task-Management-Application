@@ -12,8 +12,8 @@ import (
 )
 
 var (
-	jwtSecret  []byte
-	jwtExpiry  time.Duration
+	jwtSecret []byte
+	jwtExpiry time.Duration
 )
 
 func init() {

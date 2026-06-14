@@ -46,11 +46,11 @@ type CreateTaskRequest struct {
 }
 
 type UpdateTaskRequest struct {
-	Title       *string     `json:"title"`
-	Description *string     `json:"description"`
-	Status      *Status     `json:"status"`
-	Priority    *Priority   `json:"priority"`
-	DueDate     *time.Time  `json:"due_date"`
+	Title       *string    `json:"title"`
+	Description *string    `json:"description"`
+	Status      *Status    `json:"status"`
+	Priority    *Priority  `json:"priority"`
+	DueDate     *time.Time `json:"due_date"`
 }
 
 type SignupRequest struct {
@@ -69,11 +69,11 @@ type AuthResponse struct {
 }
 
 type ListTasksQuery struct {
-	Status     *string
-	Priority   *string
-	Search     *string
-	SortBy     *string
-	SortOrder  *string
-	Page       int
-	PageSize   int
+	Status    *string
+	Priority  *string
+	Search    *string
+	SortBy    *string
+	SortOrder *string
+	Page      int
+	PageSize  int
 }

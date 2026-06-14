@@ -75,7 +75,7 @@ test-frontend:
 lint: lint-backend lint-frontend
 
 lint-backend:
-	docker run --rm -v "$(PWD)/backend":/app -w /app golang:1.21-alpine sh -c "gofmt -l . && go vet ./..."
+	docker run --rm -v "$(PWD)/backend":/app -w /app golang:1.21-alpine sh -c "gofmt -w . && go vet ./..."
 
 lint-frontend:
 	cd frontend && npm run lint

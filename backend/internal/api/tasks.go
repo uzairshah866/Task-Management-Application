@@ -77,10 +77,10 @@ func (s *Server) HandleListTasks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := map[string]interface{}{
-		"tasks":      tasks,
-		"total":      total,
-		"page":       q.Page,
-		"page_size":  q.PageSize,
+		"tasks":       tasks,
+		"total":       total,
+		"page":        q.Page,
+		"page_size":   q.PageSize,
 		"total_pages": (total + q.PageSize - 1) / q.PageSize,
 	}
 

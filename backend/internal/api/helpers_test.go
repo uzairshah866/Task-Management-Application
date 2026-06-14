@@ -8,11 +8,11 @@ import (
 
 func TestValidateCreateTask(t *testing.T) {
 	tests := []struct {
-		name      string
-		req       models.CreateTaskRequest
-		wantErr   bool
-		wantTitle string
-		wantStatus models.Status
+		name         string
+		req          models.CreateTaskRequest
+		wantErr      bool
+		wantTitle    string
+		wantStatus   models.Status
 		wantPriority models.Priority
 	}{
 		{
@@ -50,10 +50,10 @@ func TestValidateCreateTask(t *testing.T) {
 			wantPriority: models.PriorityHigh,
 		},
 		{
-			name:         "all valid statuses accepted",
-			req:          models.CreateTaskRequest{Title: "Test", Status: models.StatusCompleted},
-			wantErr:      false,
-			wantStatus:   models.StatusCompleted,
+			name:       "all valid statuses accepted",
+			req:        models.CreateTaskRequest{Title: "Test", Status: models.StatusCompleted},
+			wantErr:    false,
+			wantStatus: models.StatusCompleted,
 		},
 		{
 			name:         "all valid priorities accepted",

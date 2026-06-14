@@ -188,6 +188,6 @@ func DeleteTask(id, userID string) error {
 	return nil
 }
 
-func isValidStatus(s string) bool    { return validStatuses[s] }
-func isValidPriority(p string) bool  { return validPriorities[p] }
-func isValidSortBy(col string) bool  { return validSortColumns[col] }
+func isValidStatus(s string) bool   { return validStatuses[s] }
+func isValidPriority(p string) bool { return validPriorities[p] }
+func isValidSortBy(col string) bool { return validSortColumns[col] }
