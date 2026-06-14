@@ -18,6 +18,7 @@ jobs:
       - name: Lint
         working-directory: backend
         run: |
+          gofmt -l .
           test -z "$(gofmt -l .)"
           go vet ./...
       - name: Test
