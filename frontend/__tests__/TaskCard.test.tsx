@@ -4,6 +4,7 @@ import { Task } from '@/components/TaskDashboard'
 
 const mockTask: Task = {
   id: '1',
+  user_id: '1',
   title: 'Fix login bug',
   description: 'Users cannot log in with special characters',
   status: 'in_progress',
@@ -51,7 +52,9 @@ describe('TaskCard', () => {
   it('does not render description when empty', () => {
     const taskWithoutDesc = { ...mockTask, description: '' }
     render(<TaskCard task={taskWithoutDesc} onDelete={onDelete} onEdit={onEdit} />)
-    expect(screen.queryByText('Users cannot log in with special characters')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Users cannot log in with special characters')
+    ).not.toBeInTheDocument()
   })
 
   it('calls onEdit with task when Edit is clicked', () => {

@@ -4,6 +4,7 @@ import { Task } from '@/components/TaskDashboard'
 
 const mockTask: Task = {
   id: '1',
+  user_id: '1',
   title: 'Existing task',
   description: 'Existing description',
   status: 'in_progress',
@@ -82,9 +83,7 @@ describe('TaskForm', () => {
     })
     fireEvent.submit(container.querySelector('form')!)
     await waitFor(() => {
-      expect(onSave).toHaveBeenCalledWith(
-        expect.objectContaining({ title: 'New task' })
-      )
+      expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ title: 'New task' }))
     })
   })
 
